@@ -1,0 +1,40 @@
+#! /usr/bin/octave
+
+% print to the command window 
+more off;
+
+function alise(arg_list)
+
+if isempty(arg_list)
+usage(mfilename);
+return;
+else
+arg = arg_list{1};
+[~, filename] = system(sprintf('which %s', mfilename));
+[filepath,name,ext] = fileparts(filename); 
+addpath(genpath(filepath));
+end
+
+switch arg
+    case 'conditioning'
+        conditioning('basedir', filepath);
+    case 'generalisation'
+        generalisation('basedir', filepath);
+    case 'calibration'
+        calibShocks;
+    otherwise
+        usage(mfilename);
+end
+end
+
+
+function usage(funcname)
+fprintf('Usage: %s arg\n', funcname);
+fprintf('Arg can be one of:\n');
+fprintf('\t calibration \n');
+fprintf('\t conditioning \n');
+fprintf('\t generalisation \n');
+end
+
+arg_list = argv();
+alise(arg_list);
